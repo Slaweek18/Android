@@ -6,17 +6,28 @@ import LoginScreen from './screens/LoginScreen';
 import SignUpScreen from './screens/LoginScreen';
 import HomeScreen from './screens/LoginScreen';
 
-const image = {
-    uri: 'https://i.pinimg.com/564x/26/47/da/2647dacbe4d0f9e91a28da7f8f8dd012.jpg'
-};
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Navigator initialRouteName='Login'>
+        <Stack.Screen name = "Login"
+            component = {
+              LoginScreen
+            }
+            options = {
+              {
+                headerTitleAlign: 'center',
+                headerTitleStyle: {
+                color: 'blue',
+                fontSize: 20,
+                fontWeight: 'bold',
+                },
+                headerShown:false
+              }
+            }
+        />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
