@@ -1,17 +1,13 @@
 import { StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React from 'react'
 
-const image = {
-    uri: 'https://i.pinimg.com/564x/26/47/da/2647dacbe4d0f9e91a28da7f8f8dd012.jpg'
-};
-
 const LoginScreen = () => {
   return (
 		<KeyboardAvoidingView
 			style={styles.container}
 			behavior="height"
 			>
-			<View>
+			<View style={styles.logoBlock}>
 				<View style={styles.imgWrapp}><Image source={require('../assets/img/Logo1.png')} style={styles.logo} /></View>
 				<Text style={styles.logoText}>MoneyDay</Text>
 			</View>
@@ -44,7 +40,7 @@ const LoginScreen = () => {
 					</TouchableOpacity>
 			</View>
 
-			<View >
+			<View style={styles.footerBlock}>
 				<Text style={styles.buttonText}>Don't have an account yet?</Text>
 					<TouchableOpacity
 						onPress={() => { }}
@@ -53,7 +49,9 @@ const LoginScreen = () => {
 						<Text style={styles.buttonTextBlue}>Sign up</Text>
 					</TouchableOpacity>	
       </View>
+			{/* <StatusBar></StatusBar> */}
 	</KeyboardAvoidingView> 
+	
   )
 }
 
@@ -63,23 +61,28 @@ const styles = StyleSheet.create({
 
 		container: {
 			flex: 1,
-			justifyContent: 'space-evenly',
+			justifyContent: 'center',
 			alignItems: 'center',
+		},
+		logoBlock:{
+			flex:1,
+			justifyContent: 'center',
 		},
 		formContainer: {
 			width: '85%',
 			backgroundColor: '#2B6AD7',
-			height: '55%',
+			height: '45%',
 			borderBottomEndRadius:100,
 			borderBottomStartRadius: 20,
 			borderTopEndRadius:100,
 			borderTopStartRadius:100,
 			justifyContent: 'space-evenly',
 			alignItems: 'center',
+			marginBottom:10,
 		},
 		inputContainer: {
 			width: '100%',
-			height: '30%',
+			height: '40%',
 			justifyContent: 'space-evenly',
 			alignItems: 'center'
 
@@ -105,7 +108,6 @@ const styles = StyleSheet.create({
     },
 		logoText:{
 			fontSize:22,
-			// marginTop:5,
 			fontWeight:'bold',
 			textAlign:'center',
 		},
@@ -131,5 +133,9 @@ const styles = StyleSheet.create({
 			fontWeight: '900',
 			fontSize: 16,
 			textAlign:'center'
+		},
+		footerBlock:{
+			marginTop:10,
+      marginBottom:10,
 		}
 })
