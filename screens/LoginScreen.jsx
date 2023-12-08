@@ -1,11 +1,14 @@
 import { StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 
 const LoginScreen = () => {
+
+	const navigation = useNavigation()
+
   return (
 		<KeyboardAvoidingView
 			style={styles.container}
-			behavior="height"
 			>
 			<View style={styles.logoBlock}>
 				<View style={styles.imgWrapp}><Image source={require('../assets/img/Logo1.png')} style={styles.logo} /></View>
@@ -43,8 +46,7 @@ const LoginScreen = () => {
 			<View style={styles.footerBlock}>
 				<Text style={styles.buttonText}>Don't have an account yet?</Text>
 					<TouchableOpacity
-						onPress={() => { }}
-						style={{}}
+						onPress={() => {navigation.navigate('SignUp')}}
 					>
 						<Text style={styles.buttonTextBlue}>Sign up</Text>
 					</TouchableOpacity>	
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
 		},
 		inputContainer: {
 			width: '100%',
-			height: '40%',
+			height: '44%',
 			justifyContent: 'space-evenly',
 			alignItems: 'center'
 
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
 			textAlign:'center'
 		},
 		footerBlock:{
-			marginTop:10,
-      marginBottom:10,
+			marginTop:5,
+      marginBottom:25,
 		}
 })

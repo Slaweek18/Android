@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 
 const SignUpScreen = () => {
 
+	const navigation = useNavigation()
+
   return (
 		<KeyboardAvoidingView
 			style={styles.container}
-			behavior="height"
 			>
       <View style={styles.container2}>
 
@@ -56,8 +58,7 @@ const SignUpScreen = () => {
         <View style={styles.footerBlock}>
           <Text style={styles.buttonText}>Already have an account?</Text>
             <TouchableOpacity
-              onPress={() => { }}
-              style={{}}
+              onPress={() => { navigation.navigate('Login') }}
             >
               <Text style={styles.buttonTextBlue}>Log In</Text>
             </TouchableOpacity>	
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
 
     container2: {
       flex:1,
-
       width:'85%',
     },
 		formContainer: {
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
 		},
 		inputContainer: {
 			width: '100%',
-      height:'52%',
+      height:'55%',
 			justifyContent: 'space-evenly',
 			alignItems: 'center'
 		},
@@ -149,6 +149,6 @@ const styles = StyleSheet.create({
 		},
     footerBlock:{
       marginTop:10,
-      marginBottom:10,
+      marginBottom:40,
     }
 })
