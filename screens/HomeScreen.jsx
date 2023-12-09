@@ -7,6 +7,7 @@ import React from 'react'
 const HomeScreen = () => {
 
 	const navigation = useNavigation()
+
   navigation.setOptions({ title: auth.currentUser.displayName })
 
   const handleSignOut = () => {

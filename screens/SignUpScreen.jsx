@@ -32,11 +32,11 @@ const SignUpScreen = () => {
         const user = userCredentials.user;
         console.log("Registered with: ", user.email);
                 //додання імені користовачу
-        updateProfile(auth.currentUser, {
+        updateProfile(user, {
           displayName: userName,
         })
         .then(() => {
-          console.log("Profile updated with: ", auth.currentUser.displayName);   
+          console.log("Profile updated with: ", user.displayName);   
         })
         .catch((error) => {
           // Обробка помилок оновлення профілю
