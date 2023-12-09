@@ -34,9 +34,9 @@ export default function Navigation() {
               {
                 headerTitleAlign: 'center',
                 headerTitleStyle: {
-                color: 'blue',
-                fontSize: 20,
-                fontWeight: 'bold',
+                  color: 'blue',
+                  fontSize: 20,
+                  fontWeight: 'bold',
                 },
                 headerShown:false
               }

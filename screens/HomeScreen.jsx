@@ -8,8 +8,12 @@ import { User } from '../components/User'
 const HomeScreen = ({navigation}) => {
 
   [employee, setEmploy] = useState([
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
+    
     {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", dateOfEmployment:"11/10/23"},])
 
   const handleSignOut = () => {
@@ -27,7 +31,7 @@ const HomeScreen = ({navigation}) => {
       <Button
         onPress={handleSignOut}
         title="Exit"
-        color='black'
+        color="#2B6AD7"
         />
       )
     }
