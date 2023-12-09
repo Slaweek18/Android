@@ -1,10 +1,50 @@
 import { StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  onAuthStateChanged
+} from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
 const SignUpScreen = () => {
 
+  const [userName, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
 	const navigation = useNavigation()
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.replace("Home")
+      }
+    })
+    
+    return unsubscribe
+  }, [])
+
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(userCredentials => {
+        const user = userCredentials.user;
+        console.log("Registered with: ", user.email);
+                //додання імені користовачу
+        updateProfile(auth.currentUser, {
+          displayName: userName,
+        })
+        .then(() => {
+          console.log("Profile updated with: ", auth.currentUser.displayName);   
+        })
+        .catch((error) => {
+          // Обробка помилок оновлення профілю
+          console.error("Error updating profile: ", error);
+        });
+    })
+    .catch(error => alert(error.message));
+  }        
 
   return (
 		<KeyboardAvoidingView
@@ -24,31 +64,31 @@ const SignUpScreen = () => {
 
             <TextInput
               placeholder="UserName"
-              // value={userName}
-              // onChangeText={text => setName(text)}
+              value={userName}
+              onChangeText={text => setName(text)}
               style={styles.input}
               placeholderTextColor='white'
               
             />
             <TextInput
               placeholder="Email"
-              // value={}
-              // onChangeText={text => }
+              value={email}
+              onChangeText={text => setEmail(text)}
               style={styles.input}
               placeholderTextColor='white'
               
             />
             <TextInput
               placeholder="Password"
-              // value={}
-              // onChangeText={text => }
+              value={password}
+              onChangeText={text => setPassword(text)}
               style={styles.input}
               placeholderTextColor='white'
               secureTextEntry
             /> 
           </View>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={handleSignUp}
               style={styles.button}
             >
               <Text style={styles.buttonText}>SIGN UP</Text>
@@ -58,7 +98,7 @@ const SignUpScreen = () => {
         <View style={styles.footerBlock}>
           <Text style={styles.buttonText}>Already have an account?</Text>
             <TouchableOpacity
-              onPress={() => { navigation.navigate('Login') }}
+              onPress={() => { navigation.replace('Login') }}
             >
               <Text style={styles.buttonTextBlue}>Log In</Text>
             </TouchableOpacity>	
@@ -85,7 +125,7 @@ const styles = StyleSheet.create({
     },
 		formContainer: {
 			width: '100%',
-      flex: 2,
+      flex: 3,
 			backgroundColor: '#2B6AD7',
 			borderBottomEndRadius:100,
 			borderBottomStartRadius: 20,
@@ -107,7 +147,8 @@ const styles = StyleSheet.create({
 			paddingVertical: 10,
 			borderColor:'white',
 			borderWidth: 1,
-			color:'white'
+			color:'white',
+      fontSize:16,
 		},
 		button: {
 			backgroundColor: 'white',

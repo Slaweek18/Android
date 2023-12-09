@@ -1,10 +1,40 @@
 import { StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import {
+  signInWithEmailAndPassword,
+  updateProfile,
+  onAuthStateChanged
+} from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
 const LoginScreen = () => {
 
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
 	const navigation = useNavigation()
+
+	useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.replace("Home")
+      }
+    })
+    
+    return unsubscribe
+  }, [])
+
+	const handleLogin = () => {
+		signInWithEmailAndPassword(auth, email, password)
+			.then(userCredentials => {
+				user = userCredentials.user;
+				console.log("Logged in with: ", user.email);
+			})
+			.catch(
+				error => alert(error.message)
+			)			
+	}
 
   return (
 		<KeyboardAvoidingView
@@ -20,23 +50,23 @@ const LoginScreen = () => {
 				<View style={styles.inputContainer}>
 					<TextInput
 						placeholder="Email"
-						// value={}
-						// onChangeText={text => }
+						value={email}
+						onChangeText={text => setEmail(text)}
 						style={styles.input}
 						placeholderTextColor='white'
 						
 					/>
 					<TextInput
 						placeholder="Password"
-						// value={}
-						// onChangeText={text => }
+						value={password}
+						onChangeText={text => setPassword(text)}
 						style={styles.input}
 						placeholderTextColor='white'
 						secureTextEntry
 					/> 
 				</View>
 					<TouchableOpacity
-						onPress={() => {}}
+						onPress={handleLogin}
 						style={styles.button}
 					>
 						<Text style={styles.buttonText}>Login</Text>
@@ -46,7 +76,7 @@ const LoginScreen = () => {
 			<View style={styles.footerBlock}>
 				<Text style={styles.buttonText}>Don't have an account yet?</Text>
 					<TouchableOpacity
-						onPress={() => {navigation.navigate('SignUp')}}
+						onPress={() => {navigation.replace('SignUp')}}
 					>
 						<Text style={styles.buttonTextBlue}>Sign up</Text>
 					</TouchableOpacity>	
@@ -73,7 +103,7 @@ const styles = StyleSheet.create({
 		formContainer: {
 			width: '85%',
 			backgroundColor: '#2B6AD7',
-			height: '45%',
+			height: '46%',
 			borderBottomEndRadius:100,
 			borderBottomStartRadius: 20,
 			borderTopEndRadius:100,
@@ -95,7 +125,9 @@ const styles = StyleSheet.create({
 			paddingVertical: 10,
 			borderColor:'white',
 			borderWidth: 1,
-			color:'white'
+			color:'white',
+      fontSize:16,
+
 		},
 		button: {
 			backgroundColor: 'white',
