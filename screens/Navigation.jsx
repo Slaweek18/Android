@@ -7,9 +7,10 @@ import HomeScreen from './HomeScreen';
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Login"
             component = {
               LoginScreen
@@ -40,9 +41,12 @@ export default function Navigation() {
               }
             } />
 
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} 
+      />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+
 
