@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './LoginScreen';
 import SignUpScreen from './SignUpScreen';
 import HomeScreen from './HomeScreen';
+import { FullUser } from './FullUser';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,7 +43,10 @@ export default function Navigation() {
             } />
 
         <Stack.Screen name="Home" component={HomeScreen} 
-      />
+        />
+
+        <Stack.Screen name="FullUser" component={FullUser} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,10 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, FlatList, TouchableOpacity, View } from 'react-native'
 import { auth } from '../firebaseConfig'
 import { Button} from 'react-native'
 // import { signOut } from 'firebase/auth'
-import React from 'react'
+import React, {useState} from 'react'
+import { User } from '../components/User'
 
 const HomeScreen = ({navigation}) => {
+
+  [employee, setEmploy] = useState([
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", dateOfEmployment:"11/10/23"},])
 
   const handleSignOut = () => {
     auth
@@ -28,32 +34,28 @@ const HomeScreen = ({navigation}) => {
   )
 
   return (
-    <View style={styles.container}>
-      <Text>
-        Home
-      </Text>
-    </View>
+    <View>
+    <FlatList
+      data={employee} 
+      renderItem={({ item }) =>
+        <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item)}}>
+          <User
+            fullName={item.fullName}
+            position={item.position}
+            level={item.level}
+            dateOfEmployment={item.dateOfEmployment}
+          />
+          
+        </TouchableOpacity>
+      }
+    />
+
+  </View>
   )
 }
 
 export default HomeScreen
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-   button: {
-    backgroundColor: '#0782F9',
-    width: '60%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 16,
-  },
+
 })
