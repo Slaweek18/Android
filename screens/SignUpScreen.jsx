@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {
   createUserWithEmailAndPassword,
@@ -6,6 +6,8 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480d580.jpg'
+
 
 const SignUpScreen = ({navigation}) => {
 
@@ -47,6 +49,8 @@ const SignUpScreen = ({navigation}) => {
 		<KeyboardAvoidingView
 			style={styles.container}
 			>
+			<ImageBackground style={styles.imageUp} source={{uri:imgUrl2}} resizeMode="cover">
+
       <View style={styles.container2}>
 
         <View style={styles.welcomeBlock}>
@@ -101,7 +105,7 @@ const SignUpScreen = ({navigation}) => {
             </TouchableOpacity>	
         </View>
       </View>
-			{/* <StatusBar></StatusBar> */}
+      </ImageBackground>
 	</KeyboardAvoidingView> 
 	
   )
@@ -113,7 +117,12 @@ const styles = StyleSheet.create({
 
 		container: {
       flex:1,
+		},
+
+		imageUp: {
 			alignItems: 'center',
+			width: '100%',
+			height: '100%',
 		},
 
     container2: {
@@ -162,11 +171,12 @@ const styles = StyleSheet.create({
     welcomeText:{
       fontSize:25,
       fontWeight:'900',
+      color:'#2B6AD7',
     },
     welcomeSubText:{
       fontSize:16,
       fontWeight:'900',
-      color:'gray',
+      color:'white',
     },
 		signUpText:{
 			fontSize: 30,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
+import { StyleSheet, 	ImageBackground, Text, View, StatusBar, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {
   signInWithEmailAndPassword,
@@ -6,6 +6,8 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480d580.jpg'
+
 
 const LoginScreen = ({navigation}) => {
 
@@ -37,6 +39,7 @@ const LoginScreen = ({navigation}) => {
 		<KeyboardAvoidingView
 			style={styles.container}
 			>
+			<ImageBackground style={styles.imageUp} source={{uri:imgUrl2}} resizeMode="cover">
 			<View style={styles.logoBlock}>
 				<View style={styles.imgWrapp}><Image source={require('../assets/img/Logo1.png')} style={styles.logo} /></View>
 				<Text style={styles.logoText}>MoneyDay</Text>
@@ -78,8 +81,8 @@ const LoginScreen = ({navigation}) => {
 						<Text style={styles.buttonTextBlue}>Sign up</Text>
 					</TouchableOpacity>	
       </View>
-			{/* <StatusBar></StatusBar> */}
-	</KeyboardAvoidingView> 
+</ImageBackground>
+</KeyboardAvoidingView> 
 	
   )
 }
@@ -90,12 +93,16 @@ const styles = StyleSheet.create({
 
 		container: {
 			flex: 1,
-			justifyContent: 'center',
-			alignItems: 'center',
 		},
 		logoBlock:{
 			flex:1,
 			justifyContent: 'center',
+		},
+		imageUp: {
+			justifyContent: 'center',
+			alignItems: 'center',
+			width: '100%',
+			height: '100%',
 		},
 		formContainer: {
 			width: '85%',
