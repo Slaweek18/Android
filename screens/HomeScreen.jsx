@@ -90,13 +90,16 @@ const styles = StyleSheet.create({
   formaModal:{
     alignItems:'center',
     marginTop:10,
-    // borderWidth:2,
+    
   },
 
   formaText:{
     marginTop:20,
     fontSize:25,
     textAlign:'center'
+  },
+  forma:{
+    flex:1,
   },
 
   addEmployee:{
