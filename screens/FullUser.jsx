@@ -17,7 +17,7 @@ const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480
 export const FullUser = ({route, navigation}) => {
 
   navigation.setOptions({
-     title:route.params.fullName
+     title:route.params.fullName 
     }
   )
 
