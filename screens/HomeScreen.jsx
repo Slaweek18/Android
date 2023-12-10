@@ -8,11 +8,11 @@ import { User } from '../components/User'
 const HomeScreen = ({navigation}) => {
 
   [employee, setEmploy] = useState([
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", idCard:"1111 1111 1111 1111", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Petro Ivanov", position:"Developer", level:"Middle", card:"1234 6547 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
     
     {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", dateOfEmployment:"11/10/23"},])
 

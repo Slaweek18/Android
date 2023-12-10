@@ -24,8 +24,11 @@ const styles = StyleSheet.create({
 		height: 150,
 		borderBottomWidth: 0,
 		shadowColor: '#676464',
-    elevation: 5,
-		marginTop:20,
+    	elevation: 5,
+		marginTop:10,
+		borderBottomEndRadius:50,
+		borderBottomStartRadius: 50,
+		borderTopEndRadius:50,
 	},
 
 	photo:{
