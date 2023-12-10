@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Image } from "react-native"
-const imgUrl = '../assets/img/man.png'
+const imgUrl = '../assets/img/man.jpg'
 
 export const User = props => {
 	return (
@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
 	},
 
 	photo:{
-		width:125,
-		height:125,
+		width:115,
+		height:115,
 	},
 
 	infoBox:{
-		padding:10
+		padding:20
 	},
 	name:{
 		fontSize:23,

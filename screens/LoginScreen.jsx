@@ -41,7 +41,7 @@ const LoginScreen = ({navigation}) => {
 			>
 			<ImageBackground style={styles.imageUp} source={{uri:imgUrl2}} resizeMode="cover">
 			<View style={styles.logoBlock}>
-				<View style={styles.imgWrapp}><Image source={require('../assets/img/Logo1.png')} style={styles.logo} /></View>
+				<View style={styles.imgWrapp}><Image source={require('../assets/img/logo2.png')} style={styles.logo} /></View>
 				<Text style={styles.logoText}>MoneyDay</Text>
 			</View>
 			
@@ -145,14 +145,15 @@ const styles = StyleSheet.create({
       height: 125,
     },
 		logoText:{
-			fontSize:22,
+			color:'white',
+			fontSize:25,
 			fontWeight:'bold',
 			textAlign:'center',
 		},
 		imgWrapp:{
 			width:150,
 			height:150,
-			backgroundColor: '#71a2f8',
+			backgroundColor: '#2B6AD7',
 			borderRadius:200,
 			justifyContent: 'center',
 			alignItems: 'center'

@@ -5,36 +5,21 @@ import { Button} from 'react-native'
 import React, {useState} from 'react'
 import { User } from '../components/User'
 import { Feather, AntDesign } from '@expo/vector-icons';
-
-const renderHeader = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return(
-  <View>
-    <TouchableOpacity style={styles.addEmployee} onPress={()=>{setIsVisible(true)}}>
-      <Feather name="user-plus" size={45} color="#2B6AD7" />
-    </TouchableOpacity>
-
-    <Modal visible={isVisible}>
-      <View style={styles.forma}>
-        <AntDesign style={styles.formaIcon} name="closesquare" size={34} color="red" onPress={() => {setIsVisible(false)}}/>
-        <Text style={styles.formaText}>
-          Форма
-        </Text>
-      </View>
-    </Modal>
-  </View>
-  )
-};
+import Form from '../components/Form';
 
 const HomeScreen = ({navigation}) => {
 
+  const [isVisible, setIsVisible] = useState(false);
+  
   [employee, setEmploy] = useState([
     {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Petro Ivanov", position:"Developer", level:"Middle", card:"1234 6547 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
+    
   ])
 
   const handleSignOut = () => {
@@ -60,10 +45,26 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <View>
+        <TouchableOpacity style={styles.addEmployee} onPress={()=>{setIsVisible(true)}}>
+          <Feather name="user-plus" size={45} color="#2B6AD7" />
+        </TouchableOpacity>
 
+        <Modal visible={isVisible}>
+          <View style={styles.forma}>
+            {/* <AntDesign style={styles.formaIcon} name="closesquare" size={34} color="red" onPress={() => {setIsVisible(false)}}/> */}
+            <AntDesign name="arrowleft" size={40} color="blue" onPress={() => {setIsVisible(false)}}/>
+            <Text style={styles.formaText}>
+              Employee information
+            </Text>
+            <Form></Form>
+          </View>
+        </Modal>
+      </View>
       <FlatList
         data={employee} 
-        ListHeaderComponent={renderHeader}
+        // ListHeaderComponent={renderHeader}
+        style={styles.list}
         renderItem={({ item }) =>
           <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item)}}>
             <User
@@ -79,22 +80,28 @@ const HomeScreen = ({navigation}) => {
     </View>
   )
 }
-
 export default HomeScreen
 
 const styles = StyleSheet.create({
+  container:{
+    flex:1,
+  },
 
-  forma:{
+  formaModal:{
     alignItems:'center',
-    marginTop:30,
+    marginTop:10,
+    // borderWidth:2,
   },
 
   formaText:{
-    borderWidth:2,
+    marginTop:20,
+    fontSize:25,
+    textAlign:'center'
   },
 
   addEmployee:{
     marginTop:15,
     alignItems:'center'
-  }
+  },
+
 })
