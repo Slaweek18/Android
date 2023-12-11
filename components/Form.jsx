@@ -2,6 +2,10 @@ import React,{useState} from "react"
 import { StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, View, Button, Text } from 'react-native'
 import { Formik } from "formik"
 import * as Yup from 'yup'
+import { auth } from '../firebaseConfig'
+import { db } from '../firebaseConfig';
+import { ref, set, push } from 'firebase/database';
+
 
 const SignupSchema = Yup.object().shape({
 	fullName: Yup.string()
@@ -22,7 +26,20 @@ const SignupSchema = Yup.object().shape({
 
 export default function Form( {addEmployee}){
 
+	const addData =(values)=> {
+		const employeesRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/');
+		const newEmployeeRef = push(employeesRef); 
 	
+		set(newEmployeeRef, {
+		  fullname: values.fullName,
+		  position: values.position,
+		  level: values.level,
+		  card: values.card,
+		  sex: values.sex,
+		  balance:0,
+		  dateOfEmployment:new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
+		});
+	  }
 
 	return (
 		<ScrollView 
@@ -42,6 +59,7 @@ export default function Form( {addEmployee}){
 					}}
 					validationSchema={SignupSchema}
 					onSubmit={(values) => { 
+						addData(values);
 						addEmployee(values);
 						console.log(values);
 					}}
