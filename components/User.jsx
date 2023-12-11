@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, Image } from "react-native"
 const imgUrl = '../assets/img/man.jpg'
 
 export const User = props => {
+	// const imgUrl = (props.sex =='Male')? '../assets/img/man.jpg' : '../assets/img/woman.png'
 	return (
 		<View style={styles.container}>
 			<Image style={styles.photo} source = {
@@ -15,7 +16,6 @@ export const User = props => {
 		</View>
 	)
 }
-
 
 const styles = StyleSheet.create({
 

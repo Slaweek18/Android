@@ -10,17 +10,26 @@ import Form from '../components/Form';
 const HomeScreen = ({navigation}) => {
 
   const [isVisible, setIsVisible] = useState(false);
-  
-  [employee, setEmploy] = useState([
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Petro Ivanov", position:"Developer", level:"Middle", card:"1234 6547 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
     
+  [employee, setEmploy] = useState([
+    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Petro Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1234 6547 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
   ])
+
+  const addEmployee = (newEmployee) => {
+    setEmploy(employees =>{
+      return [
+        newEmployee,
+        ...employees
+      ]
+    });
+    setIsVisible(false);
+  }
 
   const handleSignOut = () => {
     auth
@@ -57,7 +66,7 @@ const HomeScreen = ({navigation}) => {
             <Text style={styles.formaText}>
               Employee information
             </Text>
-            <Form></Form>
+            <Form addEmployee={addEmployee}></Form>
           </View>
         </Modal>
       </View>
@@ -72,6 +81,7 @@ const HomeScreen = ({navigation}) => {
               position={item.position}
               level={item.level}
               dateOfEmployment={item.dateOfEmployment}
+              sex={item.sex}
             />
           </TouchableOpacity>
         }

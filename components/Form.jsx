@@ -1,8 +1,26 @@
 import React,{useState} from "react"
-import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, View, Button, Text } from 'react-native'
+import { StyleSheet, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView, View, Button, Text } from 'react-native'
 import { Formik } from "formik"
+import * as Yup from 'yup'
 
-export default function Form(){
+const SignupSchema = Yup.object().shape({
+	fullName: Yup.string()
+		.min(3, 'Too Short!')
+		.max(15, 'Too Long!')
+		.required('Full name is required!'),
+	sex: Yup.string()
+		.oneOf(['Male', 'Female'], 'Invalid sex value')
+		.required('Sex is required!'),
+	position: Yup.string()
+		.required('Position is required!'),
+	level: Yup.string()
+		.required('Level is required!'),
+	card: Yup.string()
+		.matches(/^[1-9]\d{15}$/, 'Invalid card number')
+		.required('Bank card is required!'),
+});
+
+export default function Form( {addEmployee}){
 
 	return (
 		<ScrollView 
@@ -13,21 +31,19 @@ export default function Form(){
 				style={styles.main}
 			>
 				<Formik 
-					initialValues={{fullName:'', position:'', level:'', card:'', dateOfEmployment:'', sex:''}}
-					onSubmit={(values) => { console.log(values)}}
-					validate={(values) => {
-						// Функція для валідації
-						const errors = {};
-						if (!values.fullName) {
-							errors.fullName = 'Full name is required';
-						}
-						// Додайте інші правила валідації для інших полів, наприклад:
-						// if (!values.position) {
-						//   errors.position = 'Position is required';
-						// }
-						// І т.д.
-						return errors;
+					initialValues={{
+						fullName:'', 
+						position:'', 
+						level:'', 
+						card:'', 
+						sex:''
 					}}
+					validationSchema={SignupSchema}
+					onSubmit={(values) => { 
+						addEmployee(values);
+						console.log(values);
+					}}
+						
 					>
 					{(props) => (
 						<View style={styles.formContainer}>
@@ -38,7 +54,11 @@ export default function Form(){
 									value={props.values.fullName}
 									placeholder="Employee full name"
 									onChangeText={props.handleChange('fullName')}
-								/>
+									onBlur={()=> props.setFieldTouched('fullName')}
+									/>
+									{props.touched.fullName && props.errors.fullName &&  (
+										<Text style={styles.errorTxt}>{props.errors.fullName}</Text>
+									)}
 							</View>
 
 							<View style={styles.inputConrainer}>
@@ -46,9 +66,14 @@ export default function Form(){
 								<TextInput 
 									style={[styles.sex, styles.input]}
 									value={props.values.sex}
-									placeholder="male/female"
+									placeholder="Male/Female"
 									onChangeText={props.handleChange('sex')}
+									onBlur={()=> props.setFieldTouched('sex')}
+
 								/>
+									{props.touched.sex && props.errors.sex &&  (
+										<Text style={styles.errorTxt}>{props.errors.sex}</Text>
+									)}				
 							</View>
 
 							<View style={styles.inputConrainer}>
@@ -58,7 +83,12 @@ export default function Form(){
 									value={props.values.position}
 									placeholder="Employee position"
 									onChangeText={props.handleChange('position')}
+									onBlur={()=> props.setFieldTouched('position')}
+
 								/>
+									{props.touched.position && props.errors.position &&  (
+										<Text style={styles.errorTxt}>{props.errors.position}</Text>
+									)}								
 							</View>
 
 							<View style={styles.inputConrainer}>
@@ -68,7 +98,12 @@ export default function Form(){
 									value={props.values.level}
 									placeholder="Employee level"
 									onChangeText={props.handleChange('level')}
+									onBlur={()=> props.setFieldTouched('level')}
+
 								/>
+									{props.touched.level && props.errors.level &&  (
+										<Text style={styles.errorTxt}>{props.errors.level}</Text>
+									)}								
 							</View>
 
 							<View style={styles.inputConrainer}>
@@ -78,11 +113,22 @@ export default function Form(){
 									value={props.values.card}
 									placeholder="Bank card"
 									onChangeText={props.handleChange('card')}
+									onBlur={()=> props.setFieldTouched('card')}
+
+									keyboardType="numeric"
+
 								/>
+									{props.touched.card && props.errors.card &&  (
+										<Text style={styles.errorTxt}>{props.errors.card}</Text>
+									)}
 							</View>
-							<View style={styles.addButton}> 
-								<Button title="Add employee" onPress={props.handleSubmit} ></Button>
-							</View>
+
+							<TouchableOpacity 
+								style={[styles.button, {backgroundColor: props.isValid ? '#2B6AD7' : '#A5C9CA'}]} 
+								onPress={props.handleSubmit}
+								disabled={!props.isValid}> 
+								<Text style={styles.buttonText}>Add employee</Text>
+							</TouchableOpacity>
 						</View>
 					)}
 				</Formik>
@@ -122,9 +168,22 @@ const styles = StyleSheet.create({
 		borderRadius:8,
 	},
 
-	addButton:{
-		width:'40%',
+	button: {
+		// backgroundColor: '#2B6AD7',
 		marginTop:30,
+		width: '60%',
+		padding: 15,
+		borderRadius: 15,
+		alignItems: 'center',
+	},
+
+	buttonText:{
+		color:'white',
+		textTransform:'uppercase',
+		fontWeight:'bold',
+	},
+	errorTxt:{
+		color:'red',
 	}
 
 })
