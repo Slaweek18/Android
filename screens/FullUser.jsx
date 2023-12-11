@@ -12,7 +12,15 @@ import {
 const imgUrl = 'https://i.pinimg.com/564x/a0/11/91/a011918fdb0363191b1656cc84a8dc33.jpg'
 const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480d580.jpg'
 
+import { Formik } from "formik"
+import * as Yup from 'yup'
 
+const SignupSchema = Yup.object().shape({
+  amount: Yup.string()
+  .max(6, 'No more than 999999!')
+  .matches(/^[1-9]\d*$/, 'Invalid number!')
+  .required('Enter the amount!'),
+});
 
 export const FullUser = ({route, navigation}) => {
 
@@ -35,25 +43,43 @@ export const FullUser = ({route, navigation}) => {
           </ImageBackground>
         </View>
 
-        <View style={styles.transferBox}>
-          <Text style={styles.label}>Amount</Text>
-          <TextInput 				
-              // value={password}
-              // onChangeText={text => setPassword(text)}
-              placeholder='0'
-              style={styles.input}
-              placeholderTextColor='gray'
-              color="black"
-              keyboardType="numeric"
-            >
-          </TextInput>
-          <TouchableOpacity
-              onPress={()=>{}}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Transfer</Text>
-            </TouchableOpacity>
-        </View>
+        <Formik 
+					initialValues={{
+						amount:'', 
+					}}
+					validationSchema={SignupSchema}
+					onSubmit={(values) => { 
+						// addEmployee(values);
+						console.log(values);
+					}}
+						
+					>
+					{(props) => (
+          <View style={styles.transferBox}>
+            <Text style={styles.label}>Amount</Text>
+            <TextInput 				
+                placeholder='0'
+                style={styles.input}
+                placeholderTextColor='gray'
+                color="black"
+                keyboardType="numeric"  
+                value={props.values.amount}
+                onChangeText={props.handleChange('amount')}
+                onBlur={()=> props.setFieldTouched('amount')}   
+              />
+                {props.touched.amount && props.errors.amount &&  (
+									<Text style={styles.errorTxt}>{props.errors.amount}</Text>
+								)}
+
+            <TouchableOpacity style={[styles.button, {backgroundColor: props.isValid ? '#2B6AD7' : '#A5C9CA'}]} 
+								onPress={props.handleSubmit}
+								disabled={!props.isValid}> 
+                
+                <Text style={styles.buttonText}>Transfer</Text>
+              </TouchableOpacity>
+            </View>
+            )}
+        </Formik>
       </ImageBackground>
     </View>
 );
@@ -118,7 +144,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#122538',
+    // backgroundColor: '#122538',
     width: 130,
     padding: 15,
     borderRadius: 100,
@@ -138,5 +164,9 @@ const styles = StyleSheet.create({
     borderColor:'#95989962',
     color:'white',
     fontSize:16,
-  }
+  },
+
+  errorTxt:{
+		color:'red',
+	}
 })
