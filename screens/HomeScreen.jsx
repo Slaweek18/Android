@@ -1,4 +1,4 @@
-import { StyleSheet, FlatList, TouchableOpacity, View, Modal, Text } from 'react-native'
+import { RefreshControl, StyleSheet, FlatList, TouchableOpacity, View, Modal, Text } from 'react-native'
 import { auth } from '../firebaseConfig'
 import { Button} from 'react-native'
 // import { signOut } from 'firebase/auth'
@@ -9,33 +9,51 @@ import Form from '../components/Form';
 import {
   onAuthStateChanged
 } from 'firebase/auth';
+import { db } from '../firebaseConfig';
+import { ref, onValue, get} from 'firebase/database';
+import { Loading } from '../components/Loading'
 
 const HomeScreen = ({navigation}) => {
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+
   navigation.setOptions({ title: auth.currentUser.displayName || 'Welcome'}); 
   
-  [employee, setEmploy] = useState([
-    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Petro Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1234 6547 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
-  ])
+  [employee, setEmploy] = useState();
 
-  const addEmployee = (newEmployee) => {
-    setEmploy(employees =>{
-      return [
-        newEmployee,
-        ...employees
-      ]
-    });
-    setIsVisible(false);
+  const readData = () =>{
+    setIsLoading(true);
+    const employersRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/');
+    get(employersRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        // Гілка існує, можна зчитувати дані
+        onValue(employersRef, (snapshot) => {
+          const data = snapshot.val();
+          const newEmployee = Object.keys(data).map(key => ({
+            id: key,
+            ...data[key]
+          }));
+          setEmploy(newEmployee)
+        })
+      } else {
+        // Гілка не існує або там немає даних
+        setIsEmpty(true);
+        console.log('Гілка /employees/ не існує або там немає даних');
+      }
+    }).catch((error) => {
+      console.error('Помилка при перевірці гілки /employees/:', error);
+    })
+    .finally(() => {
+      setIsLoading(false);
+    })
   }
 
+  useEffect(readData,[])
+
+  
+  
   const handleSignOut = () => {
     auth
     .signOut()
@@ -56,6 +74,10 @@ const HomeScreen = ({navigation}) => {
       )
     }
   )
+  
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
     <View style={styles.container}>
@@ -70,16 +92,26 @@ const HomeScreen = ({navigation}) => {
             <Text style={styles.formaText}>
               Employee information
             </Text>
-            <Form addEmployee={addEmployee}></Form>
+            <Form setIsVisible={setIsVisible}></Form>
           </View>
         </Modal>
       </View>
 
+      {isEmpty ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyTxt}>Empty</Text>
+        </View>
+      ) : (
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={()=>{readData()}}
+          />
+        }
         data={employee} 
         style={styles.list}
         renderItem={({ item }) =>
-          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item )}}>
+          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item ) ; console.log(item.id)}
+          }>
             <User
               fullName={item.fullName}
               position={item.position}
@@ -89,7 +121,7 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
         }
       />
-
+      )}
     </View>
   )
 }
@@ -98,6 +130,18 @@ export default HomeScreen
 const styles = StyleSheet.create({
   container:{
     flex:1,
+  },
+
+  emptyContainer:{
+    justifyContent:'center',
+    alignItems:'center',
+    flex:1,
+  },
+
+  emptyTxt:{
+    fontSize:18,
+    fontWeight:'bold',
+    color:'#6661616e'
   },
 
   formaModal:{

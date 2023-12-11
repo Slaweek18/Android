@@ -10,7 +10,7 @@ import { ref, set, push } from 'firebase/database';
 const SignupSchema = Yup.object().shape({
 	fullName: Yup.string()
 		.min(3, 'Too Short!')
-		.max(15, 'Too Long!')
+		.max(25, 'Too Long!')
 		.required('Full name is required!'),
 	sex: Yup.string()
 		.oneOf(['Male', 'Female'], 'Invalid sex value')
@@ -24,14 +24,14 @@ const SignupSchema = Yup.object().shape({
 		.required('Bank card is required!'),
 });
 
-export default function Form( {addEmployee}){
+export default function Form( {setIsVisible}){
 
 	const addData =(values)=> {
 		const employeesRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/');
 		const newEmployeeRef = push(employeesRef); 
 	
 		set(newEmployeeRef, {
-		  fullname: values.fullName,
+		  fullName: values.fullName,
 		  position: values.position,
 		  level: values.level,
 		  card: values.card,
@@ -60,8 +60,8 @@ export default function Form( {addEmployee}){
 					validationSchema={SignupSchema}
 					onSubmit={(values) => { 
 						addData(values);
-						addEmployee(values);
 						console.log(values);
+						setIsVisible(false);
 					}}
 						
 					>
