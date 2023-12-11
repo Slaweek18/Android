@@ -6,8 +6,9 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
+import { ref, set } from 'firebase/database';
 const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480d580.jpg'
-
 
 const SignUpScreen = ({navigation}) => {
 
@@ -25,22 +26,30 @@ const SignUpScreen = ({navigation}) => {
     return unsubscribe
   }, [])
 
+  const addEmployer = (node) => {
+    updateProfile(auth.currentUser, {
+      displayName: userName,
+    })
+    .then(() => {
+      // Оновлення профілю успішно завершено
+      console.log("Profile updated with: ", auth.currentUser.displayName);
+      set(ref(db, 'users/' + node.uid), {
+          name: auth.currentUser.displayName,
+      });
+    })
+    .catch((error) => {
+      // Обробка помилок оновлення профілю
+      console.error("Error updating profile: ", error);
+    });
+  }
+
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
     .then(userCredentials => {
         const user = userCredentials.user;
+        addEmployer(user);
         console.log("Registered with: ", user.email);
-                //додання імені користовачу
-        updateProfile(user, {
-          displayName: userName,
-        })
-        .then(() => {
-          console.log("Profile updated with: ", user.displayName);   
-        })
-        .catch((error) => {
-          // Обробка помилок оновлення профілю
-          console.error("Error updating profile: ", error);
-        });
+                
     })
     .catch(error => alert(error.message));
   }        

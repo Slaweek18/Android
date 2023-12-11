@@ -2,20 +2,25 @@ import { StyleSheet, FlatList, TouchableOpacity, View, Modal, Text } from 'react
 import { auth } from '../firebaseConfig'
 import { Button} from 'react-native'
 // import { signOut } from 'firebase/auth'
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { User } from '../components/User'
 import { Feather, AntDesign } from '@expo/vector-icons';
 import Form from '../components/Form';
+import {
+  onAuthStateChanged
+} from 'firebase/auth';
 
 const HomeScreen = ({navigation}) => {
 
   const [isVisible, setIsVisible] = useState(false);
-    
+  navigation.setOptions({ title: auth.currentUser.displayName || 'Welcome'}); 
+  
   [employee, setEmploy] = useState([
     {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Petro Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1234 6547 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111  1111  1111  1111", balance:"0", dateOfEmployment:"11/10/23"},
+    {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
     {fullName:"Ivan Ivanov", sex:"Male", position:"Developer", level:"Middle", card:"1111 1111 1111 1111", balance:"0", dateOfEmployment:"11/10/23"},
@@ -61,7 +66,6 @@ const HomeScreen = ({navigation}) => {
 
         <Modal visible={isVisible}>
           <View style={styles.forma}>
-            {/* <AntDesign style={styles.formaIcon} name="closesquare" size={34} color="red" onPress={() => {setIsVisible(false)}}/> */}
             <AntDesign name="arrowleft" size={40} color="blue" onPress={() => {setIsVisible(false)}}/>
             <Text style={styles.formaText}>
               Employee information
@@ -70,18 +74,17 @@ const HomeScreen = ({navigation}) => {
           </View>
         </Modal>
       </View>
+
       <FlatList
         data={employee} 
-        // ListHeaderComponent={renderHeader}
         style={styles.list}
         renderItem={({ item }) =>
-          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item)}}>
+          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item )}}>
             <User
               fullName={item.fullName}
               position={item.position}
               level={item.level}
               dateOfEmployment={item.dateOfEmployment}
-              sex={item.sex}
             />
           </TouchableOpacity>
         }

@@ -22,6 +22,8 @@ const SignupSchema = Yup.object().shape({
 
 export default function Form( {addEmployee}){
 
+	
+
 	return (
 		<ScrollView 
 		contentContainerStyle={{ flexGrow: 1 }} 

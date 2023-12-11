@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   StyleSheet,
   Image,
@@ -24,11 +24,15 @@ const SignupSchema = Yup.object().shape({
 
 export const FullUser = ({route, navigation}) => {
 
+  useEffect(() => {
+    console.log(route.params);
+  }, []);
+
   navigation.setOptions({
      title:route.params.fullName 
     }
   )
-
+  
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.imageUp} source={{uri:imgUrl2}} resizeMode="cover">
@@ -49,7 +53,6 @@ export const FullUser = ({route, navigation}) => {
 					}}
 					validationSchema={SignupSchema}
 					onSubmit={(values) => { 
-						// addEmployee(values);
 						console.log(values);
 					}}
 						
