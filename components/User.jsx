@@ -1,11 +1,25 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image } from "react-native"
-const imgUrl = '../assets/img/man.jpg'
+
+const maleImage = require('../assets/img/man.jpg');
+const femaleImage = require('../assets/img/woman2.png');
 
 export const User = props => {
+
+	const [imgUrl, setImgUrl] = useState('');
+
+	useEffect(() => {
+		if (props.sex === 'Male') {
+			setImgUrl(maleImage);
+		  } else {
+			setImgUrl(femaleImage);
+		  }
+	})
+
 	return (
 		<View style={styles.container}>
 			<Image style={styles.photo} source = {
-				require(imgUrl)
+				imgUrl
 			}/>
 			<View style={styles.infoBox}>
 				<Text style={styles.name}>{props.fullName}</Text>

@@ -9,6 +9,11 @@ import {
   Touchable,
   TouchableOpacity,
 } from 'react-native';
+
+import { auth } from '../firebaseConfig'
+import { db } from '../firebaseConfig';
+import { ref, update } from 'firebase/database';
+
 const imgUrl = 'https://i.pinimg.com/564x/a0/11/91/a011918fdb0363191b1656cc84a8dc33.jpg'
 const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480d580.jpg'
 
@@ -23,6 +28,26 @@ const SignupSchema = Yup.object().shape({
 });
 
 export const FullUser = ({route, navigation}) => {
+
+  const addSalary = (amount) => {
+    let preAmount = route.params.balance;
+    let newBalance = preAmount+amount;
+
+    const updateData = () => {
+      try {
+        // Отримання посилання на вузол у базі даних та встановлення нового значення
+        const dbRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/' + route.params.id);
+        update(dbRef, {
+          balance: newBalance,
+        });
+        
+        console.log('Дані успішно оновлені в базі даних!');
+      } catch (error) {
+        console.error('Сталася помилка під час оновлення даних:', error.message);
+      }
+    };
+    updateData()
+  }
 
   useEffect(() => {
     console.log(route.params);
@@ -53,6 +78,7 @@ export const FullUser = ({route, navigation}) => {
 					}}
 					validationSchema={SignupSchema}
 					onSubmit={(values) => { 
+            addSalary(values.amount);
 						console.log(values);
 					}}
 						

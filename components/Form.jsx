@@ -39,7 +39,7 @@ export default function Form( {setIsVisible}){
 		  balance:0,
 		  dateOfEmployment:new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
 		});
-	  }
+	}
 
 	return (
 		<ScrollView 

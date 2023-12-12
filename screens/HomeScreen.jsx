@@ -117,6 +117,7 @@ const HomeScreen = ({navigation}) => {
               fullName={item.fullName}
               position={item.position}
               level={item.level}
+              sex={item.sex}
               dateOfEmployment={item.dateOfEmployment}
             />
           </TouchableOpacity>
