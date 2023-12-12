@@ -1,14 +1,10 @@
-import { RefreshControl, StyleSheet, FlatList, TouchableOpacity, View, Modal, Text } from 'react-native'
+import { RefreshControl, StyleSheet, ScrollView, FlatList, TouchableOpacity, View, Modal, Text } from 'react-native'
 import { auth } from '../firebaseConfig'
 import { Button} from 'react-native'
-// import { signOut } from 'firebase/auth'
 import React, {useEffect, useState} from 'react'
 import { User } from '../components/User'
 import { Feather, AntDesign } from '@expo/vector-icons';
 import Form from '../components/Form';
-import {
-  onAuthStateChanged
-} from 'firebase/auth';
 import { db } from '../firebaseConfig';
 import { ref, onValue, get} from 'firebase/database';
 import { Loading } from '../components/Loading'
@@ -21,14 +17,14 @@ const HomeScreen = ({navigation}) => {
 
   navigation.setOptions({ title: auth.currentUser.displayName || 'Welcome'}); 
   
-  [employee, setEmploy] = useState();
+  const [employee, setEmploy] = useState();
 
   const readData = () =>{
     setIsLoading(true);
     const employersRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/');
     get(employersRef).then((snapshot) => {
       if (snapshot.exists()) {
-        // Гілка існує, можна зчитувати дані
+
         onValue(employersRef, (snapshot) => {
           const data = snapshot.val();
           const newEmployee = Object.keys(data).map(key => ({
@@ -36,11 +32,12 @@ const HomeScreen = ({navigation}) => {
             ...data[key]
           }));
           setEmploy(newEmployee)
+          console.log(newEmployee)
+          setIsEmpty(false);
         })
       } else {
-        // Гілка не існує або там немає даних
         setIsEmpty(true);
-        console.log('Гілка /employees/ не існує або там немає даних');
+        console.log('Гілка /employees/ не існує');
       }
     }).catch((error) => {
       console.error('Помилка при перевірці гілки /employees/:', error);
@@ -52,8 +49,6 @@ const HomeScreen = ({navigation}) => {
 
   useEffect(readData,[])
 
-  
-  
   const handleSignOut = () => {
     auth
     .signOut()
@@ -74,13 +69,12 @@ const HomeScreen = ({navigation}) => {
       )
     }
   )
-  
-  if (isLoading) {
-    return <Loading />
-  }
 
   return (
-    <View style={styles.container}>
+    isLoading ? ( <Loading />)
+    :(
+    <View style={styles.container}
+    >
       <View>
         <TouchableOpacity style={styles.addEmployee} onPress={()=>{setIsVisible(true)}}>
           <Feather name="user-plus" size={45} color="#2B6AD7" />
@@ -98,9 +92,16 @@ const HomeScreen = ({navigation}) => {
       </View>
 
       {isEmpty ? (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyTxt}>Empty</Text>
-        </View>
+        <ScrollView style={{flex:1}}
+          refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={()=>{readData()}}
+          />}
+        >
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyTxt}>Empty</Text>
+          </View>
+          
+        </ScrollView>
       ) : (
       <FlatList
         refreshControl={
@@ -121,10 +122,12 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
         }
       />
-      )}
-    </View>
+    )}
+  </View>
   )
+)
 }
+    
 export default HomeScreen
 
 const styles = StyleSheet.create({
@@ -133,9 +136,10 @@ const styles = StyleSheet.create({
   },
 
   emptyContainer:{
+    marginTop:250,
+    flex:1,
     justifyContent:'center',
     alignItems:'center',
-    flex:1,
   },
 
   emptyTxt:{
@@ -155,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize:25,
     textAlign:'center'
   },
+
   forma:{
     flex:1,
   },

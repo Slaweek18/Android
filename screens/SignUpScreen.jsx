@@ -31,14 +31,12 @@ const SignUpScreen = ({navigation}) => {
       displayName: userName,
     })
     .then(() => {
-      // Оновлення профілю успішно завершено
       console.log("Profile updated with: ", auth.currentUser.displayName);
       set(ref(db, 'users/' + node.uid), {
           name: auth.currentUser.displayName,
       });
     })
     .catch((error) => {
-      // Обробка помилок оновлення профілю
       console.error("Error updating profile: ", error);
     });
   }
@@ -66,7 +64,6 @@ const SignUpScreen = ({navigation}) => {
           <Text style={styles.welcomeText}>Welcome</Text>
           <Text style={styles.welcomeSubText}>Signup into your account</Text>
         </View>
-
         
         <View style={styles.formContainer}>
           <Text style={styles.signUpText}>Sign Up</Text>
