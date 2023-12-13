@@ -37,7 +37,7 @@ export default function Form( {setIsVisible}){
 		  card: values.card,
 		  sex: values.sex,
 		  balance:0,
-		  dateOfEmployment:new Date().toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' }),
+		  dateOfEmployment:new Date().toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' }),
 		});
 	}
 

@@ -17,7 +17,7 @@ const LoginScreen = ({navigation}) => {
 	useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        navigation.replace("Home")
+        navigation.replace("HomeHistory")
       }
     })
     
@@ -78,8 +78,8 @@ const LoginScreen = ({navigation}) => {
 					<TouchableOpacity
 						onPress={() => {navigation.replace('SignUp')}}
 					>
-						<Text style={styles.buttonTextBlue}>Sign up</Text>
-					</TouchableOpacity>	
+					<Text style={styles.buttonTextBlue}>Sign up</Text>
+			</TouchableOpacity>	
       </View>
 </ImageBackground>
 </KeyboardAvoidingView> 

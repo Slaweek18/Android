@@ -13,7 +13,7 @@ import {
 
 import { auth } from '../firebaseConfig'
 import { db } from '../firebaseConfig';
-import { ref, update } from 'firebase/database';
+import { ref, set, push, update } from 'firebase/database';
 
 const imgUrl = 'https://i.pinimg.com/564x/a0/11/91/a011918fdb0363191b1656cc84a8dc33.jpg'
 const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480d580.jpg'
@@ -38,6 +38,15 @@ export const FullUser = ({route, navigation}) => {
     const updateData = () => {
       try {
         const dbRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/' + route.params.id);
+        const dbhist = ref(db, 'users/' + auth.currentUser.uid + '/history/');
+		    const newEmployeeRef = push(dbhist); 
+        set(newEmployeeRef, {
+          fullName: route.params.fullName,
+          card: route.params.card,
+          amount:amount,
+          dateOfSalary:new Date().toLocaleDateString('en-US', { hour: '2-digit', minute: '2-digit', month: 'long', day: '2-digit', year: 'numeric' }),
+        });
+        
         update(dbRef, {
           balance: newBalance,
         });

@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native"
-import { auth } from '../firebaseConfig'
-import { db } from '../firebaseConfig';
-import { ref, remove} from 'firebase/database';
 
 const maleImage = require('../assets/img/man.jpg');
 const femaleImage = require('../assets/img/woman2.png');
