@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Image,
@@ -6,8 +6,9 @@ import {
   View,
   ImageBackground,
   TextInput,
-  Touchable,
+  ScrollView,
   TouchableOpacity,
+  Alert
 } from 'react-native';
 
 import { auth } from '../firebaseConfig'
@@ -29,13 +30,14 @@ const SignupSchema = Yup.object().shape({
 
 export const FullUser = ({route, navigation}) => {
 
+  const [currentBalance, setCurrentBalance] = useState('');
+
   const addSalary = (amount) => {
-    let preAmount = route.params.balance;
-    let newBalance = preAmount+amount;
+    let preAmount = Number(route.params.balance);
+    let newBalance = +preAmount+ +amount;
 
     const updateData = () => {
       try {
-        // Отримання посилання на вузол у базі даних та встановлення нового значення
         const dbRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/' + route.params.id);
         update(dbRef, {
           balance: newBalance,
@@ -49,6 +51,27 @@ export const FullUser = ({route, navigation}) => {
     updateData()
   }
 
+  const showConfirmation = (amount) => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to send the salary',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('cancel'),
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            addSalary(amount);
+          },
+        },
+      ],
+      { cancelable: false }
+  )
+  }
+
   useEffect(() => {
     console.log(route.params);
   }, []);
@@ -59,7 +82,9 @@ export const FullUser = ({route, navigation}) => {
   )
   
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}
+    contentContainerStyle={{ flexGrow: 1 }} 
+		keyboardShouldPersistTaps="handled" >
       <ImageBackground style={styles.imageUp} source={{uri:imgUrl2}} resizeMode="cover">
         
         <View style={styles.card}>
@@ -77,9 +102,9 @@ export const FullUser = ({route, navigation}) => {
 						amount:'', 
 					}}
 					validationSchema={SignupSchema}
-					onSubmit={(values) => { 
-            addSalary(values.amount);
-						console.log(values);
+					onSubmit={(values, { resetForm }) => { 
+            showConfirmation(values.amount);
+            resetForm();
 					}}
 						
 					>
@@ -93,6 +118,7 @@ export const FullUser = ({route, navigation}) => {
                 color="black"
                 keyboardType="numeric"  
                 value={props.values.amount}
+                
                 onChangeText={props.handleChange('amount')}
                 onBlur={()=> props.setFieldTouched('amount')}   
               />
@@ -110,7 +136,7 @@ export const FullUser = ({route, navigation}) => {
             )}
         </Formik>
       </ImageBackground>
-    </View>
+    </ScrollView>
 );
 }
 
