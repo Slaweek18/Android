@@ -20,7 +20,9 @@ const HomeScreen = ({navigation}) => {
   const [employee, setEmployee] = useState([]);
 
   const readData = () =>{
+    setIsLoading(true);
     const employersRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/');
+
     onValue(employersRef, (snapshot) => {
       if (snapshot.exists()) {
         setIsEmpty(false);
@@ -39,27 +41,21 @@ const HomeScreen = ({navigation}) => {
     }, (error) => {
       console.error('Помилка при перевірці гілки /employees/:', error);
     });
+    setIsLoading(false);
   }
 
   const deleteEmployee = (id) => {
 		remove(ref(db, 'users/' + auth.currentUser.uid + '/employees/' + id))
 		.then(() => {
 			console.log('Removed Succeeded');
-      readData();
 		})
 		.catch((error)=>{
-      readData();
 			console.log('Remove failed' + error.message);
 		})
-    .finally(() => {
-      readData();
-    })
 	}
 
   useEffect(()=>{
-    setIsLoading(true);
     readData();
-    setIsLoading(false);
   },[])
 
   const handleSignOut = () => {
@@ -84,7 +80,7 @@ const HomeScreen = ({navigation}) => {
   )
 
   return (
-    isLoading ? ( <Loading />)
+    isLoading ? (<Loading />)
     :(
     <View style={styles.container}
     >
@@ -124,7 +120,7 @@ const HomeScreen = ({navigation}) => {
         data={employee} 
         style={styles.list}
         renderItem={({ item }) =>
-          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item ); console.log(item.id)}}
+          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item); console.log(item.id)}}
           >
             <User
               fullName={item.fullName}

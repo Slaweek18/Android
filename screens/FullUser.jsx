@@ -30,10 +30,11 @@ const SignupSchema = Yup.object().shape({
 
 export const FullUser = ({route, navigation}) => {
 
-  const addSalary = (amount) => {
-    let preAmount = Number(route.params.balance);
-    let newBalance = +preAmount+ +amount;
+  const [balance, setBalance] = useState(route.params.balance);
 
+  const addSalary = (amount) => {
+    let preAmount = balance;
+    let newBalance = +preAmount+ +amount;
     const updateData = () => {
       try {
         const dbRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/' + route.params.id);
@@ -47,6 +48,7 @@ export const FullUser = ({route, navigation}) => {
       }
     };
     updateData()
+    setBalance(newBalance);
   }
 
   const showConfirmation = (amount) => {
@@ -71,7 +73,7 @@ export const FullUser = ({route, navigation}) => {
   }
 
   useEffect(() => {
-    console.log("Або тут: ", route.params);
+    console.log(route.params);
   }, []);
 
   navigation.setOptions({
@@ -90,7 +92,7 @@ export const FullUser = ({route, navigation}) => {
             <View style={styles.boxText}>
               <Text style={styles.cardName}>Payment Card</Text>
               <Text style={styles.cardText}>{route.params.card}</Text>
-              <Text style={styles.balanceText}>{route.params.balance}  UAH</Text>
+              <Text style={styles.balanceText}>{balance} UAH</Text>
             </View>
           </ImageBackground>
         </View>
