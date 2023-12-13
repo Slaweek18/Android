@@ -6,7 +6,7 @@ import { User } from '../components/User'
 import { Feather, AntDesign } from '@expo/vector-icons';
 import Form from '../components/Form';
 import { db } from '../firebaseConfig';
-import { ref, onValue, get} from 'firebase/database';
+import { ref, onValue, remove, get} from 'firebase/database';
 import { Loading } from '../components/Loading'
 
 const HomeScreen = ({navigation}) => {
@@ -17,37 +17,50 @@ const HomeScreen = ({navigation}) => {
 
   navigation.setOptions({ title: auth.currentUser.displayName || 'Welcome'}); 
   
-  const [employee, setEmploy] = useState();
+  const [employee, setEmployee] = useState([]);
 
   const readData = () =>{
-    setIsLoading(true);
     const employersRef = ref(db, 'users/' + auth.currentUser.uid + '/employees/');
-    get(employersRef).then((snapshot) => {
+    onValue(employersRef, (snapshot) => {
       if (snapshot.exists()) {
-
-        onValue(employersRef, (snapshot) => {
-          const data = snapshot.val();
-          const newEmployee = Object.keys(data).map(key => ({
-            id: key,
-            ...data[key]
-          }));
-          setEmploy(newEmployee)
-          console.log(newEmployee)
-          setIsEmpty(false);
-        })
+        setIsEmpty(false);
+        const data = snapshot.val();
+        const newEmployee = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key]
+        }));
+        setEmployee(newEmployee);
+        console.log("newEmployee", newEmployee);
+        console.log("data", data);
       } else {
         setIsEmpty(true);
         console.log('Гілка /employees/ не існує');
       }
-    }).catch((error) => {
+    }, (error) => {
       console.error('Помилка при перевірці гілки /employees/:', error);
-    })
-    .finally(() => {
-      setIsLoading(false);
-    })
+    });
   }
 
-  useEffect(readData,[])
+  const deleteEmployee = (id) => {
+		remove(ref(db, 'users/' + auth.currentUser.uid + '/employees/' + id))
+		.then(() => {
+			console.log('Removed Succeeded');
+      readData();
+		})
+		.catch((error)=>{
+      readData();
+			console.log('Remove failed' + error.message);
+		})
+    .finally(() => {
+      readData();
+    })
+	}
+
+  useEffect(()=>{
+    setIsLoading(true);
+    readData();
+    setIsLoading(false);
+  },[])
 
   const handleSignOut = () => {
     auth
@@ -111,14 +124,16 @@ const HomeScreen = ({navigation}) => {
         data={employee} 
         style={styles.list}
         renderItem={({ item }) =>
-          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item ) ; console.log(item.id)}
-          }>
+          <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item ); console.log(item.id)}}
+          >
             <User
               fullName={item.fullName}
               position={item.position}
               level={item.level}
               sex={item.sex}
               dateOfEmployment={item.dateOfEmployment}
+              id={item.id}
+              onDelete={() => deleteEmployee(item.id)}
             />
           </TouchableOpacity>
         }

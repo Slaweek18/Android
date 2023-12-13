@@ -30,8 +30,6 @@ const SignupSchema = Yup.object().shape({
 
 export const FullUser = ({route, navigation}) => {
 
-  const [currentBalance, setCurrentBalance] = useState('');
-
   const addSalary = (amount) => {
     let preAmount = Number(route.params.balance);
     let newBalance = +preAmount+ +amount;
@@ -73,7 +71,7 @@ export const FullUser = ({route, navigation}) => {
   }
 
   useEffect(() => {
-    console.log(route.params);
+    console.log("Або тут: ", route.params);
   }, []);
 
   navigation.setOptions({

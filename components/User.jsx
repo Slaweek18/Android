@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image } from "react-native"
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native"
+import { auth } from '../firebaseConfig'
+import { db } from '../firebaseConfig';
+import { ref, remove} from 'firebase/database';
 
 const maleImage = require('../assets/img/man.jpg');
 const femaleImage = require('../assets/img/woman2.png');
@@ -26,6 +29,9 @@ export const User = props => {
 				<Text style={styles.position}>{props.position} / {props.level}</Text>
 				<Text style={styles.date}>{props.dateOfEmployment}</Text> 
 			</View>
+			<TouchableOpacity style={styles.deleteButton} onPress={()=>{props.onDelete();console.log('id of employee: ', props.id);}}>
+				<Text style={styles.deleteText}>Delete</Text>
+			</TouchableOpacity>
 		</View>
 	)
 }
@@ -61,6 +67,17 @@ const styles = StyleSheet.create({
 		flex:1,
 		fontSize:15,
 	},
-	date:{
+	deleteButton:{
+		backgroundColor:'red',
+		width:100,
+		height:50,
+		alignSelf:'center',
+
 	},
+	deleteText:{
+		color:'white',
+		fontSize:16,
+		fontWeight:'bold',
+		textAlign:'center',
+	}
 })
