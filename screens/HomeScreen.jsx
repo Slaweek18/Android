@@ -1,4 +1,4 @@
-import { RefreshControl, StyleSheet, ScrollView, FlatList, TouchableOpacity, View, Modal, Text } from 'react-native'
+import { RefreshControl, StyleSheet, ScrollView, FlatList, TouchableOpacity, View, Modal, Text, Alert} from 'react-native'
 import { auth } from '../firebaseConfig'
 import { Button} from 'react-native'
 import React, {useEffect, useState} from 'react'
@@ -8,6 +8,10 @@ import Form from '../components/Form';
 import { db } from '../firebaseConfig';
 import { ref, onValue, remove, get} from 'firebase/database';
 import { Loading } from '../components/Loading'
+import { Ionicons } from '@expo/vector-icons'; 
+
+const imgUrl2 = 'https://i.pinimg.com/564x/fd/3e/20/fd3e201e732dcdf6cf37f29dd480d580.jpg'
+
 
 const HomeScreen = ({navigation}) => {
 
@@ -44,6 +48,8 @@ const HomeScreen = ({navigation}) => {
     setIsLoading(false);
   }
 
+  
+
   const deleteEmployee = (id) => {
 		remove(ref(db, 'users/' + auth.currentUser.uid + '/employees/' + id))
 		.then(() => {
@@ -53,6 +59,27 @@ const HomeScreen = ({navigation}) => {
 			console.log('Remove failed' + error.message);
 		})
 	}
+
+  const showConfirmation = (id) => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to delete an employee',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('cancel'),
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            deleteEmployee(id);
+          },
+        },
+      ],
+      { cancelable: false }
+    )
+  }
 
   useEffect(()=>{
     readData();
@@ -70,11 +97,9 @@ const HomeScreen = ({navigation}) => {
   navigation.setOptions(
     {
       headerRight: () => (
-      <Button
-        onPress={handleSignOut}
-        title="Exit"
-        color="#2B6AD7"
-        />
+        <View style={styles.headerRight}>
+          <Ionicons  onPress={handleSignOut} name="exit-outline" size={34} color="black" />
+      </View>
       )
     }
   )
@@ -84,14 +109,13 @@ const HomeScreen = ({navigation}) => {
     :(
     <View style={styles.container}
     >
-      <View>
-        <TouchableOpacity style={styles.addEmployee} onPress={()=>{setIsVisible(true)}}>
-          <Feather name="user-plus" size={45} color="#2B6AD7" />
-        </TouchableOpacity>
+      <View style={styles.container2}>
+
+        <Feather name="user-plus" size={45} color="#fefefe" style={styles.addEmployee} onPress={()=>{setIsVisible(true)}}/>
 
         <Modal visible={isVisible}>
           <View style={styles.forma}>
-            <AntDesign name="arrowleft" size={40} color="blue" onPress={() => {setIsVisible(false)}}/>
+            <AntDesign name="arrowleft" size={40} color="black" onPress={() => {setIsVisible(false)}}/>
             <Text style={styles.formaText}>
               Employee information
             </Text>
@@ -118,7 +142,7 @@ const HomeScreen = ({navigation}) => {
           />
         }
         data={employee} 
-        style={styles.list}
+        contentContainerStyle={styles.flatListContainer}
         renderItem={({ item }) =>
           <TouchableOpacity onPress={() => {navigation.navigate('FullUser', item); console.log(item.id)}}
           >
@@ -129,7 +153,7 @@ const HomeScreen = ({navigation}) => {
               sex={item.sex}
               dateOfEmployment={item.dateOfEmployment}
               id={item.id}
-              onDelete={() => deleteEmployee(item.id)}
+              onDelete={() => showConfirmation(item.id)}
             />
           </TouchableOpacity>
         }
@@ -145,6 +169,9 @@ export default HomeScreen
 const styles = StyleSheet.create({
   container:{
     flex:1,
+  },
+  container2:{
+    alignItems:'center',
   },
 
   emptyContainer:{
@@ -174,11 +201,20 @@ const styles = StyleSheet.create({
 
   forma:{
     flex:1,
+    // backgroundColor:'#a8a9a9'
   },
 
   addEmployee:{
-    marginTop:15,
-    alignItems:'center'
+    position: 'absolute',
+    top:630,
+    backgroundColor: '#8d8d8e93', 
+    borderRadius: 25, 
+    padding: 10,
+    zIndex:1,
   },
+  headerRight:{
+    marginRight:10,
+  }
+
 
 })

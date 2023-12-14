@@ -86,7 +86,7 @@ export const FullUser = ({route, navigation}) => {
   }, []);
 
   navigation.setOptions({
-     title:route.params.fullName 
+     title:route.params.fullName +'(' + route.params.position +'/'+route.params.level+')'
     }
   )
   

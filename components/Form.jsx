@@ -161,6 +161,7 @@ const styles = StyleSheet.create({
 
 	main:{
 		alignItems:'center',
+		// backgroundColor:'#b1b2b2',
 	},
 
 	formContainer:{
@@ -181,10 +182,10 @@ const styles = StyleSheet.create({
 	},
 
 	input:{
-		borderWidth:1,
+		borderBottomWidth:1,
 		borderColor:'#11222263',
 		paddingHorizontal:10,
-		paddingVertical:8,
+		height:40,
 		borderRadius:8,
 	},
 

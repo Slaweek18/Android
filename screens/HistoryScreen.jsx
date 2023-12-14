@@ -1,23 +1,26 @@
-import { RefreshControl, StyleSheet, ScrollView, FlatList, TouchableOpacity, View, Modal, Text } from 'react-native'
+import { RefreshControl, StyleSheet, ScrollView, FlatList, Button, View, Modal, Text } from 'react-native'
 import { auth } from '../firebaseConfig'
-import { Button} from 'react-native'
+
 import React, {useEffect, useState} from 'react'
 import { db } from '../firebaseConfig';
 import { ref, onValue, remove} from 'firebase/database';
 import { Loading } from '../components/Loading'
 import { Salary } from '../components/Salary'
+import { MaterialIcons } from '@expo/vector-icons'; 
 
-export default HistoryScreen = () => {
+
+const HistoryScreen = ({navigation}) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
   const [transaction, setTransaction] = useState([]);
 
+  
   const readData = () =>{
     setIsLoading(true);
     const historyRef = ref(db, 'users/' + auth.currentUser.uid + '/history/');
-
+    
     onValue(historyRef, (snapshot) => {
       if (snapshot.exists()) {
         setIsEmpty(false);
@@ -38,6 +41,27 @@ export default HistoryScreen = () => {
     });
     setIsLoading(false);
   }
+
+  const clearHistory=() => {
+		remove(ref(db, 'users/' + auth.currentUser.uid + '/history/'))
+		.then(() => {
+			console.log('Removed Succeeded');
+		})
+		.catch((error)=>{
+			console.log('Remove failed' + error.message);
+		})
+	}
+
+  
+  navigation.setOptions(
+    {
+      headerRight: () => (
+      <View style={styles.headerRight}>
+        <MaterialIcons name="history" size={34} color="black" onPress={clearHistory} />
+      </View>
+      )
+    }
+  )
 
   useEffect(()=>{
     readData();
@@ -65,6 +89,7 @@ export default HistoryScreen = () => {
             <RefreshControl refreshing={isLoading} onRefresh={()=>{readData()}}
             />
           }
+          // inverted={true}
           data={transaction} 
           style={styles.list}
           renderItem={({ item }) =>
@@ -72,7 +97,7 @@ export default HistoryScreen = () => {
                 fullName={item.fullName}
                 amount={item.amount}
                 card={item.card}
-                dateOfEmployment={item.dateOfEmployment}
+                dateOfSalary={item.dateOfSalary}
               />
           }
           />
@@ -81,6 +106,8 @@ export default HistoryScreen = () => {
       )
     )
 }
+
+export default HistoryScreen
 
 
 const styles = StyleSheet.create({
@@ -121,5 +148,8 @@ const styles = StyleSheet.create({
     marginTop:15,
     alignItems:'center'
   },
+  headerRight:{
+    marginRight:10,
+  }
 
 })
