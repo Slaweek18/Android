@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 	container:{
 		flexDirection:'row',
 		height: 150,
-		width:415,
+		width:400,
 		shadowColor: '#676464',
     	elevation: 5,
 		marginTop:10,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 
 	infoBox:{
 		padding:20,
-		width:235,
+		width:205,
 	},
 	name:{
 		fontSize:23,

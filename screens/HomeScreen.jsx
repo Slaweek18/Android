@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
 
   addEmployee:{
     position: 'absolute',
-    top:630,
+    top:600,
     backgroundColor: '#8d8d8e93', 
     borderRadius: 25, 
     padding: 10,
